@@ -1,0 +1,16 @@
+##------------------------------------------------------------------------------
+## T5 Encoder Model
+##------------------------------------------------------------------------------
+## Loads a T5 encoder model from Hugging Face.
+
+
+_target_: transformers.T5EncoderModel
+config:
+  _target_: transformers.T5Config
+  vocab_size: 1000100
+  d_model: 32
+  num_heads: 8
+  dropout_rate: 0.15
+  d_ff: 32
+  d_kv: 32
+  num_layers: 2

@@ -1,0 +1,3 @@
+- trainer=ddp
+- experiment=kuairand
+- model=hf_transformer_cd_sid_ib_kuairand_pareto

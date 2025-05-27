@@ -1,0 +1,35 @@
+## Loads a T5 encoder model per domain from Hugging Face for multiple domains.
+
+
+defaults:
+  - hf_transformer_kuairand
+  - huggingface_model/t5_encoder@domain_models.9
+  - huggingface_model/t5_encoder@domain_models.4
+  - _self_
+
+_target_: src.models.modules.hf_transformer_module_cross_domain_sparse_id.HFCDSIDTransformerModule
+
+huggingface_model:
+  config:
+    num_heads: 4
+    num_layers: 3
+
+domain_models:
+  '9': 
+   _target_: ${model.huggingface_model._target_}
+   config:
+    num_heads: 2
+    num_layers: 3
+    vocab_size: 0 # setting this to 0 to prevent the model from using the vocab
+  '4': 
+   _target_: ${model.huggingface_model._target_}
+   config:
+    num_heads: 2
+    num_layers: 3
+    vocab_size: 0 # setting this to 0 to prevent the model from using the vocab
+
+feature_to_model_input_map:
+  sequence_data: input_ids
+  sequence_event_type: domain_ids
+
+masking_token: ${data.train_dataloader_config.masking_token}

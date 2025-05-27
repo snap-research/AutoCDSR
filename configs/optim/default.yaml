@@ -1,0 +1,15 @@
+## Default optimizer and scheduler configuration
+## Uses Adam and WarmupLinearScheduler
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: !!float 1e-4
+  weight_decay: !!float 1e-5
+
+scheduler:
+  _target_: src.components.scheduler.WarmupLinearScheduler
+  _partial_: true
+  warmup_steps: !!int 1000
+  min_ratio: !!float 0.3
+  scheduler_steps: ${trainer.max_steps}

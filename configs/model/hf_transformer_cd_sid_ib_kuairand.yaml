@@ -1,0 +1,18 @@
+## Loads a T5 encoder model per domain and use information bottlenecks for the communication between multiple domain.
+
+
+defaults:
+  - hf_transformer_cd_sid_kuairand
+  - _self_
+
+_target_: src.models.modules.hf_transformer_module_cross_domain_sparse_id.HFCDSIDIBTransformerModule
+
+huggingface_model: 
+  _target_: src.models.models.modeling_t5.T5EncoderModel
+
+num_ib_tokens: 4
+num_placeholder_ids: 100
+ib_comm_layers:
+  - !!int 0
+  - !!int 1
+  - !!int 2

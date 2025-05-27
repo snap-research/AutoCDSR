@@ -1,0 +1,43 @@
+## Configuration used for the Kuairand data module. It expects dataloaders for train, val and test
+## to be the same, and uses masked language modeling for training, and next token prediction
+## for validation and testing.
+defaults:
+  - dataloader_config@train_dataloader_config: kuairand_dataloader
+  - dataloader_config@val_dataloader_config: kuairand_dataloader
+  - dataloader_config@test_dataloader_config: kuairand_dataloader
+  - _self_
+
+_target_: src.data.sequence_datamodule.SequenceDataModule
+train_dataloader_config:
+  data_folder: ${paths.data_dir}/training
+  should_shuffle_rows: true
+  # whether to balance file assignment to GPU workers by file size --
+  # typically we set this to False for training since streaming data means
+  # workers will always be busy, and size-wise assignment of many files is costly
+  assign_files_by_size: false
+  labels:
+  # Name of the features that needs to be transformed for the labels for training. It will map the features to the transform functions.
+    sequence_data:
+      transform:
+        _target_: src.data.components.label_function.RandomMasking
+        masking_probability: 0.15
+val_dataloader_config:
+  dataset_class:
+    for_train: false
+  data_folder: ${paths.data_dir}/evaluation
+  should_shuffle_rows: false
+  assign_files_by_size: true # set to True for eval because here parallel speedup depends on each worker having a similar amount of data
+  labels:
+    sequence_data:
+      transform:
+        _target_: src.data.components.label_function.NextTokenMasking
+test_dataloader_config:
+  dataset_class:
+    for_train: false
+  data_folder: ${paths.data_dir}/testing
+  should_shuffle_rows: false
+  assign_files_by_size: true
+  labels:
+    sequence_data:
+      transform:
+        _target_: src.data.components.label_function.NextTokenMasking

@@ -1,0 +1,11 @@
+## Loads a T5 encoder model per domain and use information bottlenecks for the communication between multiple domain.
+
+
+defaults:
+  - hf_transformer_cd_sid_ib_kuairand
+  - _self_
+
+multi_task_plugin:
+  _target_: src.components.training_loop_functions.pareto_optimization_loop_
+  _partial_: true
+  ignore_table: true

@@ -1,0 +1,30 @@
+_target_: lightning.pytorch.trainer.Trainer
+
+default_root_dir: ${paths.output_dir}
+min_steps: 1
+# remember that if you use gradient accumulation, this number will only be updated after each accumulation
+# so for 40000 steps with gradient accumulation of 2, you will have 80000 batches
+max_steps: !!int 80000
+max_epochs: 10
+accelerator: cpu
+devices: 1
+# mixed precision for extra speed-up
+precision: 16-mixed
+log_every_n_steps: 1000
+# perform a validation loop every N training epochs
+val_check_interval: 5000
+
+# set True to to ensure deterministic results
+# makes training slower but gives more reproducibility than just setting seeds
+deterministic: False
+accumulate_grad_batches: 1
+# profiler can be simple or advanced. If you want to just print the output, change the
+# line below to the string 'simple' or 'advanced' and uncomment it
+# profile: simple
+
+# if you want to save the profiler output to a file, uncomment the following lines.
+# Only supports advanced profiler.
+# profiler:
+  # _target_: lightning.pytorch.profilers.AdvancedProfiler
+  # dirpath: .
+  # filename: profiler-report.txt

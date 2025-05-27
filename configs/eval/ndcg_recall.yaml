@@ -1,0 +1,17 @@
+## Config for using NDCG and Recall as the evaluation metrics
+
+evaluator:
+  _target_: src.components.eval_metrics.Evaluator
+  metrics: # we pass the name of the metric and the target class. Name is needed for logging purposes
+    ndcg:
+      _target_: src.components.eval_metrics.NDCG
+      _partial_: true
+    recall:
+      _target_: src.components.eval_metrics.Recall
+      _partial_: true
+  top_k_list:
+    - !!int 20
+    - !!int 10
+  should_sample_negatives_from_vocab: !!bool true
+  num_negatives: !!int 100
+  placeholder_token_buffer: 100

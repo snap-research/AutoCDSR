@@ -1,0 +1,32 @@
+# @package _global_
+
+## Example experiment changing number of layers in the model
+
+
+# to execute this experiment run:
+# python src/train.py experiment=example
+
+defaults:
+  - override /model: hf_transformer_cd_sid
+  - override /trainer: ddp
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["cross-domain", "hf-transformer"]
+
+seed: 12345
+
+trainer:
+  min_epochs: 1
+  max_epochs: 1
+
+model:
+  huggingface_model:
+    config:
+      num_layers: 2
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "cross-domain"

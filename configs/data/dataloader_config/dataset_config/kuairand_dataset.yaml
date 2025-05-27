@@ -1,0 +1,34 @@
+## ------------------------------------------------------------------------------
+## Kuairand v1 dataset
+## ------------------------------------------------------------------------------
+## Configurations for the dataset used for Kuairand v1.
+## currently supporting sparse id features and labels.
+
+_target_: src.data.components.interfaces.DatasetConfig
+user_id_field: userId
+min_sequence_length: !!int 10
+iterate_per_row: True
+features_to_consider:
+  - sequence_data
+  - sequence_event_type
+num_placeholder_tokens_map:
+  # keys are the feature names and values are the number of placeholder tokens to add.
+  # you can skip a feature that you don't want to add placeholder tokens to.
+  sequence_data: 100
+data_iterator:
+  _target_: src.data.components.iterators.TFRecordIterator
+preprocessing_functions:
+  - _target_: src.data.components.pre_processing.convert_to_dense_numpy_array
+    _partial_: True
+    # example of how to select only a few features to apply the function to
+    # features_to_apply:
+    #   - sequencefeature_unified_static__creator_id__categorical_vocab
+  - _target_: src.data.components.pre_processing.convert_fields_to_tensors
+    _partial_: True
+  - _target_: src.data.components.pre_processing.remove_oov_tokens # Only works if iterate_per_row is True
+    _partial_: True
+    oov_token: !!int -1
+  - _target_: src.data.components.pre_processing.filter_sequence_length_row # Only works if iterate_per_row is True
+    _partial_: True
+  - _target_: src.data.components.pre_processing.add_placeholder_tokens
+    _partial_: True

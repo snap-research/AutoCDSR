@@ -1,0 +1,13 @@
+## overfits to few batches
+
+# @package _global_
+
+defaults:
+  - default
+
+trainer:
+  max_epochs: 5
+  overfit_batches: 10
+
+# model ckpt and early stopping need to be disabled during overfitting
+callbacks: null

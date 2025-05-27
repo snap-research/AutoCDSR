@@ -1,0 +1,23 @@
+defaults:
+  - default
+
+# If you want to pass parameters like the static_graph flag,
+# comment this one out and uncomment the one below.
+# strategy: ddp
+
+# This step can provide a 5% speedup for DDP if your model
+# works well with static graph. Uncomment the code below to enable it.
+# strategy:
+#   _target_: lightning.pytorch.strategies.DDPStrategy
+#   static_graph: True
+
+accelerator: gpu
+devices: -1
+num_nodes: 1
+sync_batchnorm: True
+
+max_steps: 200000
+log_every_n_steps: 1
+val_check_interval: 1000
+
+accumulate_grad_batches: 1

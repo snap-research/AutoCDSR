@@ -1,0 +1,3 @@
+- trainer=ddp
+- experiment=kuairand
+- model=hf_transformer_kuairand

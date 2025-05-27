@@ -1,0 +1,28 @@
+## Dataloader config for reading from a MultiSequenceIterable dataset. Requires passing a collate_fn
+## for the dataloader to work properly. It is based on the first iterations of kuairand dataset, expecting
+## sparse ids as the features and labels.
+
+defaults:
+  - dataset_config: kuairand_dataset
+  - _self_
+
+_target_: src.data.components.interfaces.DataloaderConfig
+dataset_class:
+  _target_: src.data.components.dataloading.MultiSequenceIterable
+  _partial_: true
+data_folder: ???
+should_shuffle_rows: false
+labels: ??? # Add the name of the features that need to be transformed for the labels in the train/validation/test DataloaderConfigs defined in the DataModule. It will map the features to the transform functions.
+batch_size_per_device: 16 
+num_workers: 4
+assign_files_by_size: ???
+oov_token: !!int -1
+masking_token: !!int 1
+sequence_length: !!int 800
+padding_token: !!int 0
+drop_last: true
+pin_memory: true
+persistent_workers: true
+collate_fn:
+  _target_: src.data.components.collate_functions.collate_fn_train
+  _partial_: true

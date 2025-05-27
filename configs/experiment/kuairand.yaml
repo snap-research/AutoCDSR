@@ -1,0 +1,26 @@
+# @package _global_
+
+## Example experiment changing number of layers in the model
+
+
+# to execute this experiment run:
+# python src/train.py experiment=example
+
+defaults:
+  - override /model: hf_transformer_cd_sid_kuairand
+  - override /trainer: ddp
+  - override /data: kuai_rand
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+model:
+  huggingface_model:
+    config:
+      vocab_size: 1000100
+  feature_to_model_input_map:
+    sequence_data: input_ids
+    sequence_event_type: domain_ids
+
+paths:
+  data_dir: data
